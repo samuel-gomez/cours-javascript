@@ -293,7 +293,6 @@ const newJob = 'UX';
 const updatedInfo = { ...info, job: newJob };
 ```
 
-
 ## Classes
 Les classes en Javascript sont du sucre synthaxique, derrière il s'agit de simples objets.
 
@@ -337,5 +336,77 @@ sam.walk();
 sam.teach();
 ```
 
+On peut aussi vouloir étendre les paramètre d'instanciation : 
 
+```javascript
+class Student extends Person {
+  constructor(name, age) {
+    super(name); // obligatoire pour étendre le contructeur parent et laisser le parent faire l'init de name
+    this.age = age;
+  }
+  detail() {
+    console.log(`${this.name} is ${this.age} years old`);
+  }
+}
+const mickael = new Student('mickael', 15);
+mickael.detail();
+```
 
+## Modules
+Il s'agit d'externaliser un class , une fonction ou un objet de pouvoir l'importer partout.
+
+Dans notre exemple, on créé un fichier Person.js et un fichier Teacher.js
+
+```javascript
+// Person.js
+export class Person {
+  constructor(name) {
+    this.name = name; // ici on initialise une donnée interne avec la valeur passée à la création de l'instance
+  }
+  walk() {
+    console.log(`${this.name} is walking`);
+  }
+}
+```
+
+```javascript
+// Teacher.js
+import {Person} from './Person.js';
+
+export class Teacher extends Person {
+  teach() {
+    console.log('teach');
+  }
+}
+```
+
+```javascript
+// index.js
+import {Teacher} from './Teacher.js';
+
+const sam = new Teacher('Sam');
+sam.walk();
+sam.teach();
+```
+
+## Named and Default Exports
+
+Dans notre exemple, nous avons effectué un export nommé et c'est pour cette raison que l'on récupère l'élement importé dans des "{}"
+Si on a qu'un élément à exporter, il peut utiliser un export default : 
+
+```javascript
+export default class Teacher extends Person {
+  teach() {
+    console.log('teach');
+  }
+}
+```
+
+```javascript
+// index.js
+import Teacher from './Teacher.js'; // plus besoin des {}
+
+const sam = new Teacher('Sam');
+sam.walk();
+sam.teach();
+```
